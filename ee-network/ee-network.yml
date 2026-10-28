@@ -1,0 +1,42 @@
+---
+version: 3
+
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform/ee-minimal-rhel8:2.18
+
+dependencies:
+  python_interpreter:
+    python_path: /usr/bin/python3.12
+
+  system:
+    - libssh-devel [platform:rpm]
+
+  python:
+    - requests
+
+  galaxy:
+    collections:
+      - name: cisco.ios
+        source: private_hub_rh_certified
+      - name: cisco.nxos
+        source: private_hub_rh_certified
+      - name: cisco.iosxr
+        source: private_hub_rh_certified
+      - name: arista.eos
+        source: private_hub_rh_certified
+      - name: community.general
+        source: private_hub_community
+      - name: ansible.netcommon
+        source: private_hub_rh_certified
+      - name: ansible.posix
+        source: private_hub_rh_certified
+      - name: https://${AAP_EE_BUILDER_GITHUB_GITHUB_PUBLIC_ALMENDRA_AUTOMATION_TOKEN}@github.com/almendra-automation/ansible_content_collection_example2
+        type: git
+
+additional_build_steps:
+  prepend_galaxy:
+    - ARG ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_RH_CERTIFIED_TOKEN
+
+options:
+  package_manager_path: /usr/bin/microdnf
